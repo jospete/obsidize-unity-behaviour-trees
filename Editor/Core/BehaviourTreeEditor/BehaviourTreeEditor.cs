@@ -8,6 +8,8 @@ namespace Obsidize.BehaviourTrees.Editor
     public class BehaviourTreeEditor : EditorWindow
     {
 
+        public BehaviourTreeEditorSettings editorSettings;
+
         private delegate bool GraphViewPopulationStrategy(out BehaviourTree tree);
 
         private BehaviourTreeGraphView graphView;
