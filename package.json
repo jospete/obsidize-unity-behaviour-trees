@@ -1,0 +1,38 @@
+{
+	"name": "com.obsidize.unity.behaviour-trees",
+	"version": "0.1.0",
+	"displayName": "Behaviour Trees",
+	"description": "Visual Editor for AI Behaviour Trees",
+	"unity": "2021.3+",
+	"documentationUrl": "https://github.com/jospete/obsidize-unity-behaviour-trees/blob/master/README.md",
+	"changelogUrl": "https://github.com/jospete/obsidize-unity-behaviour-trees/blob/master/CHANGELOG.md",
+	"licensesUrl": "https://github.com/jospete/obsidize-unity-behaviour-trees/blob/master/LICENSE.md",
+	"license": "MIT",
+	"author": {
+		"name": "Obsidize Tools",
+		"email": "obsidize@gmail.com",
+		"url": "https://github.com/jospete"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/jospete/obsidize-unity-behaviour-trees.git"
+	},
+	"dependencies": {},
+	"keywords": [
+		"behaviour",
+		"behavior",
+		"tree",
+		"trees",
+		"ai",
+		"visual",
+		"editor",
+		"graph"
+	],
+	"samples": [
+		{
+			"displayName": "Basic AI",
+			"description": "Baseline for a wandering AI",
+			"path": "Samples/SamplesBaseAI"
+		}
+	]
+}
