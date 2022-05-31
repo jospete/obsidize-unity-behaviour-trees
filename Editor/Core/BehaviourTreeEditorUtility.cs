@@ -1,25 +1,23 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Obsidize.BehaviourTrees.Editor
 {
     public static class BehaviourTreeEditorUtility
     {
 
-        private const string assetsRoot = "Assets/BehaviourTrees/Editor/Core";
-        private const string treeEditorAssetRoot = assetsRoot + "/BehaviourTreeEditor";
-        private const string nodeEditorAssetRoot = assetsRoot + "/BehaviourTreeNodeView";
-        private const string editorUxmlPath = treeEditorAssetRoot + "/BehaviourTreeEditor.uxml";
-        private const string editorStyleSheetPath = treeEditorAssetRoot + "/BehaviourTreeEditor.uss";
+        private static BehaviourTreeEditorSettings _settings;
 
-        public static string nodeViewXmlPath => nodeEditorAssetRoot + "/BehaviourTreeNodeView.uxml";
+        public static BehaviourTreeEditorSettings Settings
+		{
+            get => _settings;
+            set => _settings = value;
+        }
 
         public static readonly NodeState[] ALL_NODE_STATES = Enum.GetValues(typeof(NodeState)).Cast<NodeState>().ToArray();
-        public static VisualTreeAsset GetVisualTreeAsset() => AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(editorUxmlPath);
-        public static StyleSheet GetStyleSheet() => AssetDatabase.LoadAssetAtPath<StyleSheet>(editorStyleSheetPath);
         public static string GetGraphViewClassName(this NodeState state) => $"bt-node-state-{state.ToString().ToLower()}";
 
         public static T CreateNodeAsset<T>(this BehaviourTree tree) where T : Node
@@ -67,5 +65,29 @@ namespace Obsidize.BehaviourTrees.Editor
                 AssetDatabase.SaveAssets();
             }
 		}
+
+        public static void LoadPrimarySettingsAsset()
+		{
+            Settings = FindAssetsByType<BehaviourTreeEditorSettings>().FirstOrDefault();
+		}
+
+        public static List<T> FindAssetsByType<T>() where T : UnityEngine.Object
+        {
+
+            List<T> assets = new List<T>();
+            string[] guids = AssetDatabase.FindAssets(string.Format("t:{0}", typeof(T)));
+
+            for (int i = 0; i < guids.Length; i++)
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(guids[i]);
+                T asset = AssetDatabase.LoadAssetAtPath<T>(assetPath);
+                if (asset != null)
+                {
+                    assets.Add(asset);
+                }
+            }
+
+            return assets;
+        }
     }
 }

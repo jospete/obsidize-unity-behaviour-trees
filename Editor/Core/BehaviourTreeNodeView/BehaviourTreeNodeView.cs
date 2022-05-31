@@ -22,13 +22,16 @@ namespace Obsidize.BehaviourTrees.Editor
 		public Port Input => _input;
 		public Port Output => _output;
 
-        public BehaviourTreeNodeView(Node node) : base(BehaviourTreeEditorUtility.nodeViewXmlPath)
+        public BehaviourTreeNodeView(Node node) : base(BehaviourTreeEditorUtility.Settings.NodeViewUxmlPath)
 		{
+
             _target = node;
+
 			title = ObjectNames.NicifyVariableName(node.DisplayName);
 			viewDataKey = node.Guid;
 			style.left = node.GraphPosition.x;
 			style.top = node.GraphPosition.y;
+			styleSheets.Add(BehaviourTreeEditorUtility.Settings.NodeViewStyleSheet);
 
 			CreateInputPorts();
 			CreateOutputPorts();
@@ -65,13 +68,28 @@ namespace Obsidize.BehaviourTrees.Editor
 			}
 		}
 
+		private void AddActivePathClass(VisualElement element)
+		{
+			if (element != null)
+			{
+				element.AddToClassList(activeEdgeClassName);
+			}
+		}
+
+		private void RemoveActivePathClass(VisualElement element)
+		{
+			if (element != null)
+			{
+				element.RemoveFromClassList(activeEdgeClassName);
+			}
+		}
+
 		public void SyncWithNodeState()
 		{
 
-			if (parentEdge != null)
-			{
-				parentEdge.RemoveFromClassList(activeEdgeClassName);
-			}
+			RemoveActivePathClass(parentEdge);
+			RemoveActivePathClass(Input);
+			RemoveActivePathClass(Output);
 
 			foreach (var state in BehaviourTreeEditorUtility.ALL_NODE_STATES)
 			{
@@ -85,9 +103,11 @@ namespace Obsidize.BehaviourTrees.Editor
 
 			AddToClassList(Target.State.GetGraphViewClassName());
 
-			if (parentEdge != null && Target.State == NodeState.Running)
+			if (Target.State == NodeState.Running)
 			{
-				parentEdge.AddToClassList(activeEdgeClassName);
+				AddActivePathClass(parentEdge);
+				AddActivePathClass(Input);
+				AddActivePathClass(Output);
 			}
 		}
 

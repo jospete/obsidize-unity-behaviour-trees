@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,9 +10,22 @@ namespace Obsidize.BehaviourTrees.Editor
     {
 
         [SerializeField]
-        private VisualTreeAsset _editorVisualTree;
+        private VisualTreeAsset _rootVisualTree;
 
-        public VisualTreeAsset EditorVisualTree => _editorVisualTree;
+        [SerializeField]
+        private StyleSheet _rootStyleSheet;
+
+        [SerializeField]
+        private VisualTreeAsset _nodeViewVisualTree;
+
+        [SerializeField]
+        private StyleSheet _nodeViewStyleSheet;
+
+        public VisualTreeAsset RootVisualTree => _rootVisualTree;
+        public StyleSheet RootStyleSheet => _rootStyleSheet;
+        public VisualTreeAsset NodeViewVisualTree => _nodeViewVisualTree;
+        public StyleSheet NodeViewStyleSheet => _nodeViewStyleSheet;
+        public string NodeViewUxmlPath => AssetDatabase.GetAssetPath(NodeViewVisualTree);
     }
 }
 

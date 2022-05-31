@@ -8,8 +8,6 @@ namespace Obsidize.BehaviourTrees.Editor
     public class BehaviourTreeEditor : EditorWindow
     {
 
-        public BehaviourTreeEditorSettings editorSettings;
-
         private delegate bool GraphViewPopulationStrategy(out BehaviourTree tree);
 
         private BehaviourTreeGraphView graphView;
@@ -38,9 +36,18 @@ namespace Obsidize.BehaviourTrees.Editor
 
         public void CreateGUI()
         {
+
+            BehaviourTreeEditorUtility.LoadPrimarySettingsAsset();
+
+            if (BehaviourTreeEditorUtility.Settings == null)
+			{
+                Debug.LogWarning("Failed to load Behaviour Tree Editor Settings");
+                return;
+			}
+
             var root = rootVisualElement;
-            var visualTree = BehaviourTreeEditorUtility.GetVisualTreeAsset();
-            var styleSheet = BehaviourTreeEditorUtility.GetStyleSheet();
+            var visualTree = BehaviourTreeEditorUtility.Settings.RootVisualTree;
+            var styleSheet = BehaviourTreeEditorUtility.Settings.RootStyleSheet;
 
             visualTree.CloneTree(root);
             root.styleSheets.Add(styleSheet);

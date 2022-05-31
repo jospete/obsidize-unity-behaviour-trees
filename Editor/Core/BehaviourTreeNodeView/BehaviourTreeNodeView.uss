@@ -119,6 +119,10 @@
     flex-direction: column;
 }
 
+.port.bt-node-port.bt-active-path {
+    --port-color: rgb(255, 215, 0);
+}
+
 .port.bt-node-port > #connector {
     width: 14px;
     height: 14px;
@@ -153,19 +157,18 @@
 }
 
 .bt-node-state-running #node-state {
-    background-color: rgba(255, 210, 0, 255);
+    background-color: rgb(255, 210, 0);
 }
 
 .bt-node-state-success #node-state {
-    background-color: rgba(3, 183, 0, 255);
+    background-color: rgb(3, 183, 0);
 }
 
 .bt-node-state-failure #node-state {
-    background-color: rgba(255, 0, 0, 255);
+    background-color: rgb(255, 0, 0);
 }
 
 .edge.bt-active-path {
-    width: 3px;
-    color: rgba(255, 215, 0, 255);
-    background-color: rgba(255, 215, 0, 255);
+    --edge-width: 3px;
+    --edge-color: rgb(255, 215, 0);
 }

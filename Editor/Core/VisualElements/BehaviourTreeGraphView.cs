@@ -26,7 +26,7 @@ namespace Obsidize.BehaviourTrees.Editor
             Insert(0, new GridBackground());
             AddGraphManipulators();
 
-            styleSheets.Add(BehaviourTreeEditorUtility.GetStyleSheet());
+            styleSheets.Add(BehaviourTreeEditorUtility.Settings.RootStyleSheet);
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
 		}
 
@@ -300,8 +300,11 @@ namespace Obsidize.BehaviourTrees.Editor
                 }
 
                 var edge = parentView.Output.ConnectTo(childView.Input);
-                edge.edgeControl.AddToClassList("control");
+                var edgeControl = edge.edgeControl;
+                
+                edgeControl.AddToClassList("control");
                 childView.parentEdge = edge;
+
                 AddElement(edge);
             }
         }
