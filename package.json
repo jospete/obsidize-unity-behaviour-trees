@@ -4,9 +4,9 @@
 	"displayName": "Behaviour Trees",
 	"description": "Visual Editor for AI Behaviour Trees",
 	"unity": "2021.3+",
-	"documentationUrl": "https://github.com/jospete/obsidize-unity-behaviour-trees/blob/master/README.md",
-	"changelogUrl": "https://github.com/jospete/obsidize-unity-behaviour-trees/blob/master/CHANGELOG.md",
-	"licensesUrl": "https://github.com/jospete/obsidize-unity-behaviour-trees/blob/master/LICENSE.md",
+	"documentationUrl": "https://github.com/jospete/obsidize-unity-behaviour-trees/blob/main/README.md",
+	"changelogUrl": "https://github.com/jospete/obsidize-unity-behaviour-trees/blob/main/CHANGELOG.md",
+	"licensesUrl": "https://github.com/jospete/obsidize-unity-behaviour-trees/blob/main/LICENSE.md",
 	"license": "MIT",
 	"author": {
 		"name": "Obsidize Tools",
