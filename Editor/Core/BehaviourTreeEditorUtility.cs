@@ -39,7 +39,7 @@ namespace Obsidize.BehaviourTrees.Editor
             var undoLabel = "Behaviour Tree (Create Node)";
             Undo.RecordObject(tree, undoLabel);
 
-            var node = tree.CreateNode(type);
+            var node = tree.CreateNodeWithRootCheck(type);
             Undo.RegisterCreatedObjectUndo(node, undoLabel);
 
             if (!Application.isPlaying)

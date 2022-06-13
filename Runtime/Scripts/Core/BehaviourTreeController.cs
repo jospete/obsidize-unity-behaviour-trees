@@ -16,6 +16,7 @@ namespace Obsidize.BehaviourTrees
 		protected virtual void Awake()
 		{
 			_treeInstance = _tree.Clone();
+            _treeInstance.Root.OnTreeAwake(this);
 		}
 
         protected virtual void Update()

@@ -5,7 +5,18 @@ using UnityEngine;
 namespace Obsidize.BehaviourTrees
 {
 
-    public abstract class CompositeNode : Node
+	public abstract class CompositeNode<T> : CompositeNode, INode<T> where T : Component
+	{
+		public T ControllerState { get; private set; }
+
+		public override void OnTreeAwake(BehaviourTreeController tree)
+		{
+			base.OnTreeAwake(tree);
+			ControllerState = tree.GetComponent<T>();
+		}
+	}
+
+	public abstract class CompositeNode : Node
     {
         
         [SerializeField]
@@ -16,7 +27,7 @@ namespace Obsidize.BehaviourTrees
 
 		private int _currentIndex;
 
-		protected abstract NodeState ExitState { get; }
+		protected abstract NodeState TerminalChildState { get; }
 		protected abstract NodeState AllChildrenProcessedState { get; }
 
 		public override string PrimaryUssClass => "bt-composite";
@@ -80,33 +91,70 @@ namespace Obsidize.BehaviourTrees
 		protected override NodeState OnUpdate()
 		{
 
-			if (_currentIndex >= Children.Count)
+			if (!Controller.ActiveTree.Root.PersistCompositeState)
 			{
-				_currentIndex = 0;
+				return EvaluateAllChildren();
+			}
+			
+			var isExitState = EvaluateChildAt(_currentIndex, out var updatedState);
+			
+			if (!isExitState)
+			{
+				_currentIndex++;
 			}
 
-			var child = Children[_currentIndex];
+			return updatedState;
+		}
+
+		protected NodeState EvaluateAllChildren()
+		{
+
+			if (Children.Count > 0)
+			{
+				for (int i = 0; i < Children.Count; i++)
+				{
+					if (EvaluateChildAt(i, out var exitState))
+					{
+						return exitState;
+					}
+				}
+			}
+
+			return AllChildrenProcessedState;
+		}
+
+		protected bool EvaluateChildAt(int index, out NodeState state)
+		{
+
+			if (index < 0 || index >= Children.Count)
+			{
+				state = NodeState.Failure;
+				return true;
+			}
+
+			var child = Children[index];
 
 			if (child == null)
 			{
-				return NodeState.Failure;
+				state = NodeState.Failure;
+				return true;
 			}
 
-			var updatedState = child.Update();
+			state = child.Update();
 
-			if (updatedState == NodeState.Running || updatedState == ExitState)
+			if (state == NodeState.Running || state == TerminalChildState)
 			{
-				return updatedState;
+				return true;
 			}
 
-			_currentIndex++;
-
-			if (_currentIndex >= Children.Count)
+			if (index >= Children.Count - 1)
 			{
-				return AllChildrenProcessedState;
+				state = AllChildrenProcessedState;
+				return true;
 			}
 
-			return NodeState.Running;
+			state = NodeState.Running;
+			return false;
 		}
 	}
 }

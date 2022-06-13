@@ -45,6 +45,27 @@ namespace Obsidize.BehaviourTrees
             return node;
         }
 
+        public Node CreateNodeWithRootCheck(System.Type type)
+		{
+            return type == typeof(RootNode) ? CreateRootNode() : CreateNode(type);
+		}
+
+        public RootNode CreateRootNode()
+		{
+
+            if (_root == null)
+			{
+                _root = FindExistingRootNode();
+			}
+
+            if (_root == null)
+			{
+                _root = CreateNode<RootNode>();
+            }
+
+            return _root;
+		}
+
         public NodeState Update()
         {
 
@@ -62,6 +83,20 @@ namespace Obsidize.BehaviourTrees
 
             return _treeState;
         }
+
+        private RootNode FindExistingRootNode()
+		{
+
+			foreach (var node in _children)
+			{
+                if (node is RootNode)
+				{
+                    return node as RootNode;
+				}
+			}
+
+            return null;
+		}
 
         private Node CreateNodeInstance(System.Type type)
 		{

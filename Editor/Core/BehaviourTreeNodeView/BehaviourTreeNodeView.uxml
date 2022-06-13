@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/BehaviourTrees/Editor/Core/BehaviourTreeNodeView/BehaviourTreeNodeView.uss?fileID=7433441132597879392&amp;guid=2ce4a38183ae1d24b945c95417f7999c&amp;type=3#BehaviourTreeNodeView" />
+    <Style src="project://database/Assets/Obsidize/BehaviourTrees/Editor/Core/BehaviourTreeNodeView/BehaviourTreeNodeView.uss?fileID=7433441132597879392&amp;guid=2ce4a38183ae1d24b945c95417f7999c&amp;type=3#BehaviourTreeNodeView" />
     <ui:VisualElement name="node-state" />
     <ui:VisualElement name="node-border" picking-mode="Ignore">
         <ui:VisualElement name="contents" style="border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px;">

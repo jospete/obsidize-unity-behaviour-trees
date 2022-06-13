@@ -20,16 +20,14 @@ namespace Obsidize.BehaviourTrees
         [HideInInspector]
         private Vector2 _graphPosition;
 
-        private NodeState _state = NodeState.Running;
-        private bool _started = false;
-
-        public virtual string DisplayName => name;
+        public virtual string DisplayName => GetType().Name;
         public string Description => _description;
         public virtual string PrimaryUssClass => "bt-node";
         public abstract NodeChildCapacity ChildCapacity { get; }
 
-        public NodeState State => _state;
-        public bool Started => _started;
+        public NodeState State { get; protected set; } = NodeState.Running;
+        public bool Started { get; protected set; }
+        public BehaviourTreeController Controller { get; protected set; }
         public bool Idle => State == NodeState.Running && !Started;
 
         public string Guid
@@ -77,30 +75,31 @@ namespace Obsidize.BehaviourTrees
         public NodeState Update()
 		{
 
-            if (!_started)
+            if (!Started)
 			{
                 OnStart();
-                _started = true;
-
+                Started = true;
             }
 
-            _state = OnUpdate();
+            State = OnUpdate();
 
-            if (_state == NodeState.Failure || _state == NodeState.Success)
+            if (State == NodeState.Failure || State == NodeState.Success)
 			{
                 OnStop();
-                _started = false;
+                Started = false;
             }
 
-            return _state;
+            return State;
         }
 
-        protected virtual void OnTreeAwake(BehaviourTreeController tree)
+        public virtual void OnTreeAwake(BehaviourTreeController controller)
         {
+
+            Controller = controller;
 
             var children = GetChildren();
 
-            if (children == null)
+            if (children == null || children.Count <= 0)
             {
                 return;
             }
@@ -109,7 +108,7 @@ namespace Obsidize.BehaviourTrees
             {
                 if (child != null)
                 {
-                    child.OnTreeAwake(tree);
+                    child.OnTreeAwake(controller);
                 }
             }
         }

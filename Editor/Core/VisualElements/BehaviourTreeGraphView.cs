@@ -73,6 +73,8 @@ namespace Obsidize.BehaviourTrees.Editor
             tree.CreateRootNodeAssetIfNeeded();
             tree.Children.ForEach(CreateNodeView);
             tree.Children.ForEach(CreateNodeViewConnections);
+
+            FrameAll();
         }
 
         private BehaviourTreeNodeView FindNodeView(Node node)
@@ -97,16 +99,26 @@ namespace Obsidize.BehaviourTrees.Editor
 		public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
 		{
 
-            var types = TypeCache.GetTypesDerivedFrom<ActionNode>()
-                .Concat(TypeCache.GetTypesDerivedFrom<CompositeNode>())
-                .Concat(TypeCache.GetTypesDerivedFrom<DecoratorNode>())
-                .Where(type => !type.IsGenericType && !type.IsAbstract);
+            var targetPosition = viewTransform.matrix.inverse.MultiplyPoint(evt.localMousePosition);
+
+            AddContextMenuNodeCategory<DecoratorNode>(evt, targetPosition);
+            AddContextMenuNodeCategory<CompositeNode>(evt, targetPosition);
+            AddContextMenuNodeCategory<ConditionNode>(evt, targetPosition);
+            AddContextMenuNodeCategory<ActionNode>(evt, targetPosition);
+        }
+
+        private void AddContextMenuNodeCategory<T>(ContextualMenuPopulateEvent evt, Vector3 targetPosition) where T : Node
+		{
+
+            var types = TypeCache.GetTypesDerivedFrom<T>().Where(type => !type.IsGenericType && !type.IsAbstract);
+            var categoryName = typeof(T).Name;
+            var actionNamePrefix = categoryName + "s/";
 
             foreach (var type in types)
-			{
-                var actionName = $"[{type.BaseType.Name}] {type.Name}";
-                evt.menu.AppendAction(actionName, _ => CreateNodeAsset(type));
-			}
+            {
+                var actionName = actionNamePrefix + type.Name;
+                evt.menu.AppendAction(actionName, action => CreateNodeAsset(action, type, targetPosition));
+            }
         }
 
         public void SyncAllNodeStates()
@@ -154,7 +166,7 @@ namespace Obsidize.BehaviourTrees.Editor
             AddElement(nodeView);
         }
 
-        private Node CreateNodeAsset(Type type)
+        private Node CreateNodeAsset(DropdownMenuAction action, Type type, Vector3 targetPosition)
         {
 
             if (!HasTreeRef(nameof(CreateNodeAsset)))
@@ -163,6 +175,7 @@ namespace Obsidize.BehaviourTrees.Editor
             }
 
             var node = tree.CreateNodeAsset(type);
+            node.GraphPosition = targetPosition;
             CreateNodeView(node);
 
             return node;
